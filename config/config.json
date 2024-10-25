@@ -1,0 +1,30 @@
+{
+    "mariadb": {
+    "host": "<host>",
+    "user": "<user>",
+    "password": "<password>",
+    "database": "db_ticket",
+    "multipleStatements": true
+    },
+
+    "auth0": {
+        "secret": "<secret>",
+        "baseURL": "<baseURL>",
+        "clientID": "<clientID>"
+    },
+
+    "logout": {
+        "ip": "<ip>",
+        "port": "<port>"
+    },
+
+    "multer": {
+        "fileLimit": 3
+    },
+
+    "imap": {
+        "user": "<email>",
+        "password": "<application password>"
+    }
+}
+

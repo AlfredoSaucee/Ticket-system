@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticket Details</title>
+</head>
+<body>
+  <%- include("header"); %>
+
+  <div class="container">
+    <div class="sidebar">
+      <ul>
+          <li><a href="/profile">Dashboard</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <% if (roles && roles.includes('agent')) { %>
+            <li><a href="#services">Knowledge base</a></li>
+            <li><a href="/admin">Admin Panel</a></li>
+          <% } %>
+          <li><a href="/logout1">Logout</a></li>
+      </ul>
+  </div>
+
+    <div class="content">
+      <div class="ticket-details-section">
+        <% if (ticket) { %>
+          <h2 class="ticket-title"><%= ticket.ticket_title %></h2>
+          <div class="ticket-info-flex">
+            <div class="ticket-info-left">
+              <p>User: <%= ticket.user_name || 'N/A' %></p>
+              <p>Agent: <%= ticket.agent_name || 'Unclaimed' %></p>
+            </div>
+            <div class="ticket-info-right">
+              <!-- Agent-specific actions -->
+              <% if (roles && roles.includes('agent')) { %>
+                <!-- Dropdown to change category -->
+                <form action="/change-category" method="POST" class="comment-form-container">
+                  <input type="hidden" name="ticketId" value="<%= ticket.ticket_id %>">
+                  <div class="comment-input-group">
+                    <select name="category" id="category">
+                      <% categories.forEach(category => { %>
+                        <option value="<%= category.category_name %>" <%= ticket.category_id === category.id ? 'selected' : '' %> >
+                          <%= category.category_name %>
+                        </option>
+                      <% }); %>
+                    </select>
+                    <button class="button" type="submit">Update Category</button>
+                  </div>
+                </form>
+                <!-- Claim Ticket Form -->
+                <% if (!ticket.agent_name) { %> 
+                  <form id="claimTicketForm" action="/claim" method="POST">
+                    <input type="hidden" name="ticketId" value="<%= ticket.ticket_id %>">
+                    <button class="button" type="submit">Claim Ticket</button>
+                  </form>
+                <% } %>
+
+                
+              <% } %>
+
+              <!-- Close/Open Ticket Form -->
+              <% if (ticket.ticket_status === 0 || ticket.ticket_status === 2) { %>
+                <form id="openclose" action="/ticket-action" method="POST">
+                  <input type="hidden" name="ticketId" value="<%= ticket.ticket_id %>">
+                  <input type="hidden" name="actionType" value="close">
+                  <button class="button" type="submit">Solve Ticket</button>
+                </form>
+              <% } else if (ticket.ticket_status === 1) { %>
+                <form id="openclose" action="/ticket-action" method="POST">
+                  <input type="hidden" name="ticketId" value="<%= ticket.ticket_id %>">
+                  <input type="hidden" name="actionType" value="open">
+                  <button class="button" type="submit">Open</button>
+                </form>
+              <% } %>
+
+              <!-- Status Display -->
+              <p>
+                <% if (ticket.ticket_status === 0) { %>
+                  <p class="notresolved">Not resolved</p>
+                <% } else if (ticket.ticket_status === 1) { %>
+                  <p class="resolved">Resolved</p>
+                <% } else if (ticket.ticket_status === 2) { %>
+                  <p class="claimed">Claimed</p>
+                <% } else { %>
+                  <p class="unknown">Unknown status</p>
+                <% } %>
+              </p>
+            </div>
+          </div>
+
+          <!-- Ticket description -->
+          <div class="ticket-description-scroll-box">
+            <%= ticket.ticket_description %>
+          </div>
+        <% } else { %>
+          <p>No ticket information available.</p>
+        <% } %>
+      </div>
+
+      <!-- File Attachments Section -->
+      <div class="ticket-file-attachments-section">
+        <h3>File Attachments</h3>
+        <div id="fileRows">
+          <% if (files && files.length > 0) { %>
+            <% files.forEach(file => { %>
+              <div class="file-row">
+                <a href="<%= file.file_path %>" download="<%= file.file_name %>" target="_blank">
+                  <%= file.file_name %>
+                </a>
+                <span>(<%= file.file_size %> bytes)</span>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <div class="file-row no-files">No files attached.</div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Comments section -->
+      <div class="scrollable-comments-box">
+        <div id="commentRows">
+          <% if (comments && comments.length > 0) { %>
+            <% comments.forEach(comment => { %>
+              <div class="comment-row">
+                <div class="comment-cell">
+                  <div class="comment-cell">
+                    <%= comment.comment_user_name %> <%= comment.formatted_created_at %>
+                  </div>
+                  <div class="scrollable">
+                    <br>
+                    <%= comment.comment_comment %>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <div class="comment-row no-comments">
+              <div class="comment-cell" colspan="5">No comments found</div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Add comment form -->
+      <div class="comment-form">
+        <form action="/create-comment" method="POST" class="comment-form-container">
+          <input type="hidden" name="ticketId" value='<%= ticket.ticket_id %>'>
+          <div class="comment-input-group">
+            <textarea name="commentText" required></textarea>
+            <button class="button" type="submit">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

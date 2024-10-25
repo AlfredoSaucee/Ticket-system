@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+</head>
+<body>
+  <%- include("header"); %>
+
+  <div class="container">
+    <div class="sidebar">
+      <ul>
+          <li><a href="/profile">Dashboard</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <% if (roles && roles.includes('agent')) { %>
+            <li><a href="#services">Knowledge base</a></li>
+            <li><a href="/admin">Admin Panel</a></li>
+          <% } %>
+          <li><a href="/logout1">Logout</a></li>
+      </ul>
+  </div>
+
+    <div class="content">
+      <h2 class="ticket-h2">Your Tickets</h2>
+        <!-- Filtering options -->
+<div class="filter-input">
+  <div class="filter-group">
+    <div class="filter-item">
+      <label for="statusFilter">Filter by Status:</label>
+      <select id="statusFilter" onchange="filterTable()">
+        <option value="">All</option>
+        <option value="1">Resolved</option>
+        <option value="0">Not resolved</option>
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label for="nameFilter">Filter by User or Agent:</label>
+      <input type="text" id="nameFilter" oninput="filterTable()">
+    </div>
+  </div>
+</div>
+      <!-- Ticket headers for sorting -->
+      <div class="tickets-header">
+        <div class="ticket-header" onclick="sortTable(0)">Ticket ID</div>
+        <div class="ticket-header" onclick="sortTable(1)">Title</div>
+        <div class="ticket-header" onclick="sortTable(2)">User</div>
+        <div class="ticket-header" onclick="sortTable(3)">Agent</div>
+        <div class="ticket-header" onclick="sortTable(4)">Category</div>
+        <div class="ticket-header" onclick="sortTable(5)">Status</div>
+      </div>
+      <!-- Display tickets -->
+       
+      <div class="tickets-view">
+        <div id="ticketRows">
+          <% if (tickets && tickets[0].length > 0) { %>
+            <% tickets[0].forEach(ticket => { %>
+              <a class="ticket-row" href="/ticket-view/<%= ticket.ticket_id %>">
+                <div class="ticket-cell"><%= ticket.ticket_id %></div>
+                <div class="ticket-cell"><%= ticket.ticket_title %></div>
+                <div class="ticket-cell"><%= ticket.user_name %></div>
+                <div class="ticket-cell">
+                  <% if (ticket.agent_name) { %>
+                    <%= ticket.agent_name %>
+                  <% } else { %>
+                    Unclaimed
+                  <% } %>
+                </div>
+                <div class="ticket-cell"><%= ticket.ticket_category %></div>
+                <div class="ticket-cell">
+                  <% if (ticket.ticket_status === 0) { %>
+                    <p class="notresolved">Not resolved</p>
+                  <% } else if (ticket.ticket_status === 1) { %>
+                    <p class="resolved">Resolved</p>
+                  <% } else if (ticket.ticket_status === 2) { %>
+                    <p class="claimed">Claimed</p>
+                  <% } else { %>
+                    <p class="unknown">Unknown status</p>
+                  <% } %>
+                </div>
+              </a>
+            <% }); %>
+          <% } else { %>
+            <div class="ticket-row no-tickets">
+              <div class="ticket-cell" colspan="5">No tickets found</div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let sortOrder = {}; // Track sort order for each column
+      
+      // Sorting function
+      function sortTable(columnIndex) {
+        const table = document.getElementById('ticketRows');
+        const rows = Array.from(table.getElementsByClassName('ticket-row'));
+      
+        // Toggle sort order
+        if (!sortOrder[columnIndex]) {
+          sortOrder[columnIndex] = 'asc';
+        } else {
+          sortOrder[columnIndex] = sortOrder[columnIndex] === 'asc' ? 'desc' : 'asc';
+        }
+      
+        const sortedRows = rows.sort((a, b) => {
+          const aText = a.getElementsByClassName('ticket-cell')[columnIndex].innerText.trim();
+          const bText = b.getElementsByClassName('ticket-cell')[columnIndex].innerText.trim();
+      
+          const isNumeric = !isNaN(aText) && !isNaN(bText);
+          let comparison = 0;
+      
+          if (isNumeric) {
+            comparison = Number(aText) - Number(bText);
+          } else {
+            comparison = aText.localeCompare(bText);
+          }
+      
+          return sortOrder[columnIndex] === 'asc' ? comparison : -comparison;
+        });
+      
+        table.innerHTML = '';
+        sortedRows.forEach(row => table.appendChild(row));
+      }
+      
+      // Filtering function
+function filterTable() {
+  const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
+  const statusFilter = document.getElementById('statusFilter').value;
+
+  const rows = document.querySelectorAll('.ticket-row');
+
+  rows.forEach(row => {
+    const userName = row.getElementsByClassName('ticket-cell')[2].innerText.toLowerCase();
+    const agentName = row.getElementsByClassName('ticket-cell')[3].innerText.toLowerCase();
+    const statusValue = row.getElementsByClassName('ticket-cell')[5].querySelector('p').classList.contains('resolved') ? 1 : 0;
+
+    let isVisible = true;
+
+    // Filter by combined user/agent name
+    if (nameFilter && !(userName.includes(nameFilter) || agentName.includes(nameFilter))) {
+      isVisible = false;
+    }
+
+    // Filter by status
+    if (statusFilter !== '' && parseInt(statusFilter) !== statusValue) {
+      isVisible = false;
+    }
+
+    row.style.display = isVisible ? '' : 'none';
+  });
+}
+
+    </script>
+    
+    
+
+    <script src="/scripts/dashboard.js"></script>
+</body>
+</html>

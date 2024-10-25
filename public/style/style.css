@@ -1,0 +1,433 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: hsl(208, 100%, 95%);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Header */
+
+header {
+    background-color: #0D1321;
+    z-index: 0;
+    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin: 8px;
+}
+
+.user-icon {
+    width: 24px;
+    height: 24px;
+    margin: 8px;
+}
+
+h1.logo, h2.user {
+    margin: 0;
+}
+
+.logo {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 6em;
+    padding: 0.2em;
+}
+
+.user {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 2em;
+    padding: 0.2em;
+    text-align: center;
+    
+}
+
+.user-icon {
+    width: 2em;
+    fill: white;
+    stroke-width: 10px;
+}
+
+.button {
+    background-color: #3855E8;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+    margin: 8px;
+}
+
+.button:hover {
+    background-color: #314ac9;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.25);
+}
+
+.button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(72, 180, 97, 0.4);
+}
+
+/* Sidebar */
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #0D1321;
+    color: white;
+    padding-top: 20px;
+    z-index: 1;
+    box-shadow: 8px 0px 10px rgba(0, 0, 0, 0.2);
+    position:relative;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    text-align: center;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 10px;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.sidebar ul li a:hover {
+    transform: translateX(10px);
+}
+
+.content {
+    flex-grow: 1;
+    padding: 40px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-ticket {
+    margin: 40px;
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    box-shadow: 8px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.comment-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .comment-input-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .comment-input-group textarea {
+    flex: 1;
+    resize: none;
+  }
+  
+  .comment-input-group button {
+    flex-shrink: 0;
+    height: 50px;
+  }
+  
+  .ticket-description-scroll-box {
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+.comment-section {
+    border: 1px solid black;
+    margin-top: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Main container for the ticket list */
+.tickets {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.ticket-row {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.ticket-row:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.ticket-cell {
+    flex: 1;
+    padding: 10px;
+    text-align: left;
+    border-right: none;
+}
+
+.ticket-status {
+    background-color: #3855E8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.notresolved {
+    background-color: rgb(176, 55, 55);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.resolved {
+    background-color: rgb(55, 176, 103);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.claimed {
+    background-color: rgb(217, 184, 86);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+.tickets-view {
+    max-height: 45vh;
+    overflow-y: auto;
+    padding: 10px;
+  }
+
+.ticket-h2{
+    font-size: 2em;
+    font-weight: bold;
+    color: #3855E8;
+    margin-bottom: 20px;
+}
+
+.ticket-header { 
+    cursor: pointer; 
+    font-weight: bold; 
+    padding: 10px; 
+    text-align: left; 
+}
+
+.filter-input input, .filter-input select { 
+    padding: 10px; 
+    margin-right: 10px; 
+    font-size: 16px;
+    border-radius: 5px; 
+    border: 1px solid #ccc; 
+}
+
+.tickets-header { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 10px 0; 
+    font-size: 18px; 
+    font-weight: bold; 
+    color: #3855E8; 
+}
+
+/* Flexbox container for aligning left and right sections */
+.ticket-info-flex {
+    display: flex;                    
+    justify-content: space-between;   
+    align-items: center;              
+    width: 100%;                      
+}
+
+.ticket-info-left {
+    text-align: left;                 
+    flex: 1;                          
+}
+
+.ticket-info-right {
+    text-align: right;                
+    display: flex;                    
+    align-items: center;              
+    flex-shrink: 0;                  
+    min-width: 150px;               
+}
+
+.ticket-info-right p {
+    margin-right: 10px;               
+}
+
+.ticket-comment-section {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.back-to-dashboard-link {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.back-to-dashboard-link:hover {
+    text-decoration: underline;
+}
+
+.form-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    max-width: 60vw;
+    margin:auto;
+    width: 100%;
+  }
+
+input[type="text"], #description, #category {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+  }
+
+/* Textarea specific styling */
+textarea {
+    width: 100%;
+    height: 30px;
+    resize: none;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+/* Dropdown styling */
+select {
+    cursor: pointer;
+}
+
+.ticket-comment-section {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Ticket comments */
+/* Scrollable comments section */
+.scrollable-comments-box {
+    max-height: 220px; 
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .comment-row {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+
+.filter-input {
+    font-size: 16px;
+  }
+  
+  .filter-group {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .filter-item {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .filter-item label {
+    margin-bottom: 5px; 
+  }
+  
+  .filter-group input,
+  .filter-group select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .ticket-file-attachments-section {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }

@@ -1,0 +1,28 @@
+<%- include("header"); %>
+<div class="container">
+  <div class="sidebar">
+    <ul>
+        <li><a href="/profile">Dashboard</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <% if (roles && roles.includes('agent')) { %>
+          <li><a href="#services">Knowledge base</a></li>
+          <li><a href="/admin">Admin Panel</a></li>
+        <% } %>
+        <li><a href="/logout1">Logout</a></li>
+    </ul>
+</div>
+
+  <div class="content">
+    <div class="form-container">
+      <form id="categoryForm" method="post" action="/create-category">
+        <h2>Create a New Category</h2>
+  
+        <label for="categoryName">Category Name</label>
+        <input type="text" id="categoryName" name="categoryName" required placeholder="Enter category name">
+
+        <button type="submit" class="button">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
